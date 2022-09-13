@@ -197,13 +197,19 @@ public class RoadMap {
     }
 
     public void removeAllNodesBut(List<Node> nodesToKeep){
-        List<Node> nodesToRemove = nodes.values().stream()
-                .filter(node -> !nodesToKeep.contains(node))
-                .collect(Collectors.toList());
+        nodesToKeep.forEach(node -> {
+            if(node == null) {
+                System.out.println("node is null");
+            }
+            nodes.remove(Long.parseLong(node.getId().toString()));
+        });
+//        List<Node> nodesToRemove = nodes.values().parallelStream()
+//                .filter(node -> !nodesToKeep.contains(node))
+//                .collect(Collectors.toList());
 
-        LOGGER.info(nodesToRemove.size() + " nodes that are not part of main component are found and being removed.");
-
-        removeNodes(nodesToRemove);
+        LOGGER.info(nodesToKeep.size() + " nodes that are not part of main component are found and being removed.");
+//
+//        removeNodes(nodesToRemove);
     }
 
     public boolean removeEdge(Edge edge){

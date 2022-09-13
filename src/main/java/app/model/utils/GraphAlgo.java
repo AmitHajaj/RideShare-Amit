@@ -6,6 +6,7 @@ import app.model.graph.Node;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static utils.logs.LogHandler.LOGGER;
 import static utils.Utils.validate;
@@ -215,6 +216,25 @@ public final class GraphAlgo {
      */
     public static void extractLargestCC(){
         RoadMap.INSTANCE.removeAllNodesBut(getLargestCC());
+    }
+
+    public static void boundMap(){
+        Collection<Node> nodes = RoadMap.INSTANCE.getNodes();
+        List<Node> excluded = new ArrayList<>();
+        nodes.forEach(node -> {
+            if (node.getLatitude() < 32.4087 && node.getLatitude() > 31.8227){
+                if (node == null ){
+                    System.out.println("node is null");
+                }
+                excluded.add(node);
+            }
+        });
+
+        if(excluded.stream().filter(Objects::isNull).count() > 0) {
+            System.out.println("found null in the list");
+        }
+
+        RoadMap.INSTANCE.removeAllNodesBut(excluded);
     }
 
 

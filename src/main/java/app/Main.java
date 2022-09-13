@@ -137,7 +137,7 @@ public final class Main {
     private Main() {}
 
     static{
-        PARSE_FROM_PBF = false;
+        PARSE_FROM_PBF = true;
         PBF_PATH = "/Users/amitha/Desktop";
         NODE_IN_MAIN_COMPONENT =2432701015L;
         SIMULATOR_SPEED = 2.0;
@@ -145,7 +145,7 @@ public final class Main {
         CONSOLE_LOG_LEVEL =
 //                "SEVERE";
                 "ALL";
-        SHOW_MAP = false;
+        SHOW_MAP = true;
         DRIVE_NUM = 15;
         REQUEST_NUM = 20;
     }

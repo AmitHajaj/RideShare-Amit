@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
 
+import static app.model.utils.GraphAlgo.boundMap;
 import static app.model.utils.GraphAlgo.extractLargestCC;
 import static utils.logs.LogHandler.LOGGER;
 import static utils.Utils.throwException;
@@ -32,8 +33,8 @@ import static utils.Utils.throwException;
 public final class RoadMapHandler {
     private static final Map<String, Node> locations= new HashMap<>();//TODO check if locations needed
     private static boolean bound;
-    private static Double maxLatitude = 32.13073917015928, minLatitude = 32.0449580796914,
-                        maxLongitude = 34.852006, minLongitude = 34.72856;
+    private static Double maxLatitude = 32.4087, minLatitude = 31.8227,
+                        maxLongitude = 35.2016, minLongitude = 34.8267;
     private RoadMapHandler() {}
 
 
@@ -148,8 +149,13 @@ public final class RoadMapHandler {
             LOGGER.info("Start parsing Reader's data.");
             parser.parseMapWays(reader.getWays());
 
+
+
             // clean road map
-            extractLargestCC();
+            System.out.println("before");
+            boundMap();
+            System.out.println("after");
+//            extractLargestCC();
 //            GraphAlgo.removeNodesThatNotConnectedTo(RoadMap.INSTANCE.getNode(2432701015L));
 
         } catch (FileNotFoundException e) {

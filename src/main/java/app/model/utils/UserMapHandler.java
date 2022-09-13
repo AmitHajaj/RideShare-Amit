@@ -6,8 +6,15 @@ import app.model.graph.RoadMap;
 import app.model.users.Driver;
 import app.model.users.Passenger;
 import app.model.users.UserMap;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import utils.JsonHandler;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static utils.logs.LogHandler.LOGGER;
@@ -35,8 +42,10 @@ public class UserMapHandler {
     public static void initRandomEvents(int driveNum, int pedestriansNum){
         userMap.setFirstEventTime();
 
-        initRandDrives(driveNum);
-        initRandRiders(pedestriansNum);
+        initDrives();
+        initRiders();
+//        initRandDrives(driveNum);
+//        initRandRiders(pedestriansNum);
     }
 
     public static void printUserMapState(){
@@ -105,6 +114,22 @@ public class UserMapHandler {
         }
 
         LOGGER.finer("init "+ requestsNum + " pedestrians.");
+    }
+
+    public static void initDrives(){
+        List<Driver> drives = createDrivesFromJson();
+
+        for(Driver drive : drives){
+            userMap.addDrive(drive);
+        }
+    }
+
+    public static void initRiders(){
+        List<Passenger> drives = createRidersFromJson();
+
+        for(Passenger drive : drives){
+            userMap.addRequest(drive);
+        }
     }
 
     public static void initRandDrives(int drivesNum) {
@@ -180,4 +205,79 @@ public class UserMapHandler {
         printUserMapState();
     }
 
+    private static List<Driver> createDrivesFromJson() {
+        String path = "/Users/amitha/Desktop/RideShare55/data/maps/trips.json";
+        JSONParser parser = new JSONParser();
+        List<Driver> drives = new ArrayList<>();
+        List<Node> nodes = new ArrayList<>(RoadMap.INSTANCE.getNodes());
+
+        // read json file from path
+        try {
+            JSONArray drivesArray = (JSONArray) parser.parse(new FileReader(path));
+
+            for (Object drive : drivesArray) {
+                JSONObject tempDrive = (JSONObject) drive;
+
+                String id = (String) tempDrive.get("id");
+
+                JSONObject src = (JSONObject) tempDrive.get("src");
+                JSONObject dest = (JSONObject) tempDrive.get("dest");
+
+                Coordinates srcCo = new Coordinates(Double.parseDouble(src.get("latitude").toString()), Double.parseDouble(src.get("longtitude").toString()));
+                Coordinates destCo = new Coordinates(Double.parseDouble(dest.get("latitude").toString()), Double.parseDouble(dest.get("longtitude").toString()));
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd hh:mm:ss", Locale.ENGLISH);
+                String dateInString = tempDrive.get("date").toString().substring(0, 22).replace('T', ' ');
+                Date leaveTime = formatter.parse(dateInString);
+
+                Node mapSrcNode = GraphAlgo.findClosestNode(srcCo, nodes);
+                Node mapDestNode = GraphAlgo.findClosestNode(destCo, nodes);
+
+                Driver driver = new Driver(mapSrcNode, mapDestNode, leaveTime);
+                drives.add(driver);
+            }
+
+        } catch (IOException | ParseException | java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return drives;
+    }
+
+    private static List<Passenger> createRidersFromJson() {
+        String path = "/Users/amitha/Desktop/RideShare55/data/maps/ridersDrives.json";
+        JSONParser parser = new JSONParser();
+        List<Passenger> drives = new ArrayList<>();
+        List<Node> nodes = new ArrayList<>(RoadMap.INSTANCE.getNodes());
+
+        // read json file from path
+        try {
+            JSONArray drivesArray = (JSONArray) parser.parse(new FileReader(path));
+
+            for (Object drive : drivesArray) {
+                JSONObject tempDrive = (JSONObject) drive;
+
+                String id = (String) tempDrive.get("id");
+
+                JSONObject src = (JSONObject) tempDrive.get("src");
+                JSONObject dest = (JSONObject) tempDrive.get("dest");
+
+                Coordinates srcCo = new Coordinates(Double.parseDouble(src.get("latitude").toString()), Double.parseDouble(src.get("longtitude").toString()));
+                Coordinates destCo = new Coordinates(Double.parseDouble(dest.get("latitude").toString()), Double.parseDouble(dest.get("longtitude").toString()));
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-M-dd hh:mm:ss", Locale.ENGLISH);
+                String dateInString = tempDrive.get("date").toString().substring(0, 22).replace('T', ' ');
+                Date leaveTime = formatter.parse(dateInString);
+
+                Node mapSrcNode = GraphAlgo.findClosestNode(srcCo, nodes);
+                Node mapDestNode = GraphAlgo.findClosestNode(destCo, nodes);
+
+                Passenger passenger = new Passenger(mapSrcNode, mapDestNode, leaveTime);
+                drives.add(passenger);
+            }
+
+        } catch (IOException | ParseException | java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return drives;
+    }
 }
