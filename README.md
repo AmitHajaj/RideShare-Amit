@@ -10,9 +10,9 @@ After carefully considering the time frame, we have decided to build only the si
 
 ## Goals
 1. Create a Simulator that will simulate drivers and riders behaviour for research purposes.
-<br/>With the help of the simulator we could:
-    1. Check performance of DeepPool models, and deterministic matching algorithms.
-    2. Check the potential that exist in ride-sharing behaviour on people transportation decisions.
+   <br/>With the help of the simulator we could:
+   1. Check performance of DeepPool models, and deterministic matching algorithms.
+   2. Check the potential that exist in ride-sharing behaviour on people transportation decisions.
 3. This simulator can also be a great infrastructure for other navigation or ride-sharing apps.(our first idea)
 
 ## Challenges
@@ -28,7 +28,7 @@ We made a survey that asks for drivers and riders(our testers were students at A
 we also need a simulator to test the model on visualize it. We wanted to own the map and not use any API, or 3-rd party app that we have no control on it.
 #### Solution
 We choose to use OSM service. OSM is an open-source map service that let you download the map and make any manipulations you want/need. With it, we could create a simple map that we could train and visualize our model on.
-   <br/> ![(Simulator showing TLV map)](https://i.ibb.co/mC5Tmgb/Screen-Shot-2022-09-11-at-17-10-32.png)
+<br/> ![(Simulator showing TLV map)](https://i.ibb.co/mC5Tmgb/Screen-Shot-2022-09-11-at-17-10-32.png)
 
 ### algorithms
 #### Problem description
@@ -40,10 +40,12 @@ With the data and the simulator we now can build our models to find the best and
 After online research on map services, we choose to use two famous search algorithms.[1](#Literature)
 1. **Dijkstra** -  algorithm for finding the shortest paths between nodes in a graph.
 2. **A*** - The same idea as Dijkstra, but can be used on high scale graphs due to its heuristic function.(We used Manhattan Distance)
-<br/>With these two, we can find the fastest path between two nodes on weighted graph as we have here. And thanks to A*, we could also use our simulator on high scaled maps. 
+   <br/>With these two, we can find the fastest path between two nodes on weighted graph as we have here. And thanks to A*, we could also use our simulator on high scaled maps.
 
 ### Training
-When we will have the first three mentioned above, we need to train the model we built on the data we have. During the process we tune our algorithms to fit the best for our predefined requirements. We started with a simple generic Dijkstra and A*, and finally we arrived to the last version we have here. The current version is not the best we thought of, but considering the time frame we have, this is the best we could get. 
+When we will have the first three mentioned above, we need to train the model we built on the data we have. During the process we tune our algorithms to fit the best for our predefined requirements. We started with a simple generic Dijkstra and A*, and finally we arrived to the last version we have here. The current version is not the best we thought of, but considering the time frame we have, this is the best we could get.
+<br/> Here you can see how to simulator look when it is running. At the following image we have Tel-Aviv map with 40 drivers and 30 riders.
+![simulator running on Tel-Aviv map](https://i.ibb.co/Ln3RLmP/Screen-Shot-2022-09-18-at-10-51-15.png)
 
 ## Tools
 We used different tools for this project. Some are functional and others are to manage the project.
@@ -57,7 +59,11 @@ We used different tools for this project. Some are functional and others are to 
 ## Literature
 1. [Google Maps search algorithm's](https://www.researchgate.net/publication/333117435_Google_Maps)
 2. [OSM services Wiki and documentation](https://wiki.openstreetmap.org/wiki/Main_Page)
-3. 
+
+
+## Disclaimers
+We couldn't apply the simulator on high scale data as we collected and created. This happened mainly because the multi-threading system, and cause a lot of interruptions. Obviously, with more time and adjustments we could apply the simulator on our real data.
+<br/>Having said that, we will show next the result of 20 riders who will get picked up by 15 drivers. We are aware of the fact that we used small sample size.
 
 |id     |ask_time                    |pickup_time          |src                                                                                                                                |drop_time            |dest                                                                                                                            |total_time_waited|total_time_traveled|
 |-------|----------------------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------|-----------------|-------------------|
